@@ -4,16 +4,18 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# Load API key
+# Load environment variables from .env
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Function to handle submission
+# Set up OpenAI client with API key
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Function to get AI response
 def get_completion():
     prompt = prompt_input.get("1.0", tk.END).strip()
     if prompt:
         try:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}]
             )
@@ -26,7 +28,7 @@ def get_completion():
         output_box.insert(tk.END, result)
         output_box.config(state='disabled')
 
-# Build GUI
+# Build the GUI
 window = tk.Tk()
 window.title("OpenAI Prompt App")
 window.geometry("600x500")
